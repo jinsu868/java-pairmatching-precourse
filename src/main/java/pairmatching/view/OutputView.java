@@ -44,6 +44,10 @@ public class OutputView {
         System.out.println(INIT_MESSAGE);
     }
 
+    public void printErrorMessage(String message) {
+        System.out.println(message);
+    }
+
     private String makePrintForm(String name, List<String> missions) {
         String missionForm = missions.stream()
                 .collect(Collectors.joining(DELIMITER));

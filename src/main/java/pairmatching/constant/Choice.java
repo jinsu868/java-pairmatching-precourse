@@ -4,25 +4,25 @@ import java.util.Arrays;
 import pairmatching.error.ErrorCode;
 
 public enum Choice {
-    ONE("1"),
-    TWO("2"),
-    THREE("3"),
+    MATCHING("1"),
+    RETRIEVE("2"),
+    INIT("3"),
     QUIT("Q");
 
-    private String selectedNumber;
+    private String selectedValue;
 
-    private Choice(String selectedNumber) {
-        this.selectedNumber = selectedNumber;
+    private Choice(String selectedValue) {
+        this.selectedValue = selectedValue;
     }
 
-    public static void isContain(String input) {
-        Arrays.stream(Choice.values())
-                .filter(choice -> input.equals(choice.getSelectedNumber()))
+    public static Choice getChoiceByValue(String value) {
+        return  Arrays.stream(Choice.values())
+                .filter(choice -> value.equals(choice.getSelectedValue()))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> ErrorCode.INVALID_SELECT.getException());
     }
 
-    public String getSelectedNumber() {
-        return selectedNumber;
+    public String getSelectedValue() {
+        return selectedValue;
     }
 }
