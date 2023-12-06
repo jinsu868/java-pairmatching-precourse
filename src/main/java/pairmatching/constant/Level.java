@@ -3,6 +3,7 @@ package pairmatching.constant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import pairmatching.error.ErrorCode;
 
 public enum Level {
     LEVEL1("레벨1", Arrays.asList("자동차경주", "로또", "숫자야구게임")),
@@ -17,6 +18,13 @@ public enum Level {
     Level(String name, List<String> missions) {
         this.name = name;
         this.missions = missions;
+    }
+
+    public static Level getLevel(String input) {
+        return Arrays.stream(values())
+                .filter(level -> level.getName().equals(input))
+                .findAny()
+                .orElseThrow(() -> ErrorCode.INVALID_LEVEL.getException());
     }
 
     public String getName() {
