@@ -17,7 +17,7 @@ public class MatchingManager {
         matchingResults = new ArrayList<>();
     }
 
-    public void matchPair(Course course, Level level, String mission) {
+    public List<Pair> matchPair(Course course, Level level, String mission) {
         List<MatchingResult> matchingResults = getMatchingResultsByLevel(level);
         Matching matching = new Matching(course, level, mission);
         boolean isMatch = true;
@@ -33,23 +33,23 @@ public class MatchingManager {
                 }
             }
             if (isMatch == true) {
-                matchingResults.add(new MatchingResult(matchPairs, level, course, mission));
-                break;
+
+                MatchingResult matchingResult = new MatchingResult(matchPairs, level, course, mission);
+                matchingResults.add(matchingResult);
+                return matchingResult.getPairs();
             }
         }
         if (isMatch == false) {
             throw new IllegalStateException();
         }
+        return new ArrayList<>();
     }
 
     private List<Pair> getMatchPairsByCourse(Course course, Matching matching) {
-        List<Pair> matchPairs = new ArrayList<>();
         if (course == Course.BACKEND) {
-            matching.matchPair(backendCrews);
-        } else {
-            matching.matchPair(frontendCrews);
+            return matching.matchPair(backendCrews);
         }
-        return matchPairs;
+        return matching.matchPair(frontendCrews);
     }
 
     private boolean isPairDuplicateInSameLevel(List<Pair> matchPairs, Pair pair) {

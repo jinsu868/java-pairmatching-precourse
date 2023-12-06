@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import pairmatching.constant.Level;
+import pairmatching.domain.Pair;
 
 public class OutputView {
     private final static String FUNCTION_SELECT_MESSAGE = "기능을 선택하세요.\n"
@@ -30,6 +31,17 @@ public class OutputView {
                         .map(level -> makePrintForm(level.getName(), level.getMissions()))
                                 .forEach(form -> System.out.println(form));
         System.out.println(PAIR_RETRIEVE_END_MESSAGE);
+    }
+
+    public void printMatchingResult(List<Pair> pairs) {
+        for (Pair pair : pairs) {
+            System.out.println(makeResultPrintForm(pair));
+        }
+    }
+
+    private String makeResultPrintForm(Pair pair) {
+        return pair.getCrewNames().stream()
+                .collect(Collectors.joining(" : "));
     }
 
     public void printPairMatchingResultIntroMessage() {

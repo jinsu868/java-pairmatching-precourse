@@ -4,9 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import pairmatching.constant.Choice;
+import pairmatching.constant.Course;
+import pairmatching.constant.Level;
 import pairmatching.domain.Crew;
 import pairmatching.domain.Crews;
+import pairmatching.domain.MatchingManager;
+import pairmatching.domain.Pair;
 import pairmatching.dto.CrewCreateDto;
+import pairmatching.dto.PairRetrieveDto;
 import pairmatching.view.InputView;
 import pairmatching.view.OutputView;
 
@@ -22,12 +27,17 @@ public class MatchingController {
     public void run() {
         Crews backendCrews = setBackendCrews();
         Crews frontendCrews = setFrontendCrews();
-        
+        MatchingManager matchingManager = new MatchingManager(backendCrews, frontendCrews);
         while (true) {
             Choice choice = getChoice();
             if (choice.equals(Choice.MATCHING)) {
-                System.out.println("matching");
-
+                outputView.printPairRetrieveIntroMessage();
+                PairRetrieveDto pairRetrieveDto = inputView.inputRetrieveInfo();
+                Course course = Course.getCourse(pairRetrieveDto.getCourse());
+                Level level = Level.getLevel(pairRetrieveDto.getLevel());
+                String mission = pairRetrieveDto.getMission();
+                List<Pair> pairs = matchingManager.matchPair(course, level, mission);
+                outputView.printMatchingResult(pairs);
             } else if (choice.equals(Choice.RETRIEVE)) {
                 System.out.println("retrieve");
             } else if (choice.equals(Choice.INIT)) {
