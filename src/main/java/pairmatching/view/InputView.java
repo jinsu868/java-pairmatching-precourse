@@ -36,7 +36,6 @@ public class InputView {
 
     public String inputChoice() {
         String input = Console.readLine();
-        validateSelectInput(input);
         return input;
     }
 
@@ -51,11 +50,6 @@ public class InputView {
             throw ErrorCode.INVALID_RETRIEVE_INFO.getException();
         }
         return new PairRetrieveDto(data[0], data[1], data[2]);
-    }
-
-
-    private void validateSelectInput(String input) {
-        Choice.isContain(input);
     }
 
     private List<String> readCrewNameFromFile(String source) throws FileNotFoundException {
