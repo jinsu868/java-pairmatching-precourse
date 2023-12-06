@@ -1,6 +1,12 @@
 package pairmatching.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import pairmatching.constant.Choice;
+import pairmatching.domain.Crew;
+import pairmatching.domain.Crews;
+import pairmatching.dto.CrewCreateDto;
 import pairmatching.view.InputView;
 import pairmatching.view.OutputView;
 
@@ -14,6 +20,9 @@ public class MatchingController {
     }
 
     public void run() {
+        Crews crews = setCrews();
+        crews.test();
+
         while (true) {
             Choice choice = getChoice();
             if (choice.equals(Choice.MATCHING)) {
@@ -27,6 +36,16 @@ public class MatchingController {
                 break;
             }
         }
+    }
+
+    private Crews setCrews() {
+        List<CrewCreateDto> backendCrewCreateDto = inputView.inputBackendCrewNames();
+        List<CrewCreateDto> frontendCrewCreateDto = inputView.inputFrontendCrewNames();
+        List<Crew> crews = Stream.of(backendCrewCreateDto, frontendCrewCreateDto)
+                .flatMap(dto -> dto.stream())
+                .map(dto -> new Crew(dto.getCourse(), dto.getName()))
+                .collect(Collectors.toList());
+        return new Crews(crews);
     }
 
     private Choice getChoice() {

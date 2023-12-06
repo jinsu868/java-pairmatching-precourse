@@ -8,7 +8,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import pairmatching.constant.Choice;
+import pairmatching.constant.Course;
+import pairmatching.dto.CrewCreateDto;
 import pairmatching.dto.PairRetrieveDto;
 import pairmatching.error.ErrorCode;
 
@@ -18,17 +21,21 @@ public class InputView {
     private static final int RETRIEVE_INFO_SIZE = 3;
     private static final String DELIMITER = ", ";
 
-    public List<String> inputBackendCrewNames() {
+    public List<CrewCreateDto> inputBackendCrewNames() {
         try {
-            return readCrewNameFromFile(BACKEND_SOURCE);
+            return readCrewNameFromFile(BACKEND_SOURCE).stream()
+                    .map(name -> new CrewCreateDto(name, Course.BACKEND))
+                    .collect(Collectors.toList());
         } catch (FileNotFoundException e) {
             throw ErrorCode.FILE_NOT_EXIST.getException();
         }
     }
 
-    public List<String> inputFrontendCrewNames() {
+    public List<CrewCreateDto> inputFrontendCrewNames() {
         try {
-            return readCrewNameFromFile(FRONTEND_SOURCE);
+            return readCrewNameFromFile(FRONTEND_SOURCE).stream()
+                    .map(name -> new CrewCreateDto(name, Course.FRONTEND))
+                    .collect(Collectors.toList());
         } catch (FileNotFoundException e) {
             throw ErrorCode.FILE_NOT_EXIST.getException();
         }
