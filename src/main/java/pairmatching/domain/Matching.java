@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import pairmatching.constant.Course;
 import pairmatching.constant.Level;
-import pairmatching.dto.PairDto;
 import pairmatching.error.ErrorCode;
 
 public class Matching {
@@ -19,9 +18,9 @@ public class Matching {
         this.mission = mission;
     }
 
-    public List<PairDto> matchPair(Crews crews) {
+    public List<Pair> matchPair(Crews crews) {
         List<Crew> shuffledCrews = crews.getShuffledCrews();
-        List<PairDto> pairs = new ArrayList<>();
+        List<Pair> pairs = new ArrayList<>();
         if (shuffledCrews.size() % 2 == 0) {
             for (int i = 0; i < shuffledCrews.size(); i += 2) {
                 getPairDto(shuffledCrews, pairs, i);
@@ -38,11 +37,11 @@ public class Matching {
         return pairs;
     }
 
-    private void getPairDto(List<Crew> shuffledCrews, List<PairDto> pairs, int i) {
-        PairDto pairDto = new PairDto();
-        pairDto.addCrew(shuffledCrews.get(i).getName());
-        pairDto.addCrew(shuffledCrews.get(i +1).getName());
-        pairs.add(pairDto);
+    private void getPairDto(List<Crew> shuffledCrews, List<Pair> pairs, int i) {
+        Pair pair = new Pair();
+        pair.addCrew(shuffledCrews.get(i).getName());
+        pair.addCrew(shuffledCrews.get(i +1).getName());
+        pairs.add(pair);
     }
 
 
