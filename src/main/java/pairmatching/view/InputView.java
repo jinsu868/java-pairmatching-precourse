@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import pairmatching.constant.Choice;
 import pairmatching.dto.PairRetrieveDto;
 import pairmatching.error.ErrorCode;
 
@@ -33,9 +34,10 @@ public class InputView {
         }
     }
 
-    public int inputNumber() {
+    public String inputChoice() {
         String input = Console.readLine();
-        return parseInt(input);
+        validateSelectInput(input);
+        return input;
     }
 
     public PairRetrieveDto inputRetrieveInfo() {
@@ -52,12 +54,8 @@ public class InputView {
     }
 
 
-    private int parseInt(String input) {
-        try {
-            return Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            throw ErrorCode.INVALID_SELECT_NUMBER.getException();
-        }
+    private void validateSelectInput(String input) {
+        Choice.isContain(input);
     }
 
     private List<String> readCrewNameFromFile(String source) throws FileNotFoundException {
