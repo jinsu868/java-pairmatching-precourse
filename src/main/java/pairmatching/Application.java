@@ -11,6 +11,5 @@ public class Application {
         OutputView outputView = new OutputView();
         outputView.printPairRetrieveIntroMessage();
         PairRetrieveDto pairRetrieveDto = inputView.inputRetrieveInfo();
-
     }
 }
