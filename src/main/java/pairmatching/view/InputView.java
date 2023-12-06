@@ -1,5 +1,6 @@
 package pairmatching.view;
 
+import camp.nextstep.edu.missionutils.Console;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,19 +13,32 @@ public class InputView {
     private static final String BACKEND_SOURCE = "src/main/resources/backend-crew.md";
     private static final String FRONTEND_SOURCE = "src/main/resources/frontend-crew.md";
 
-    public void inputBackendCrewNames() {
+    public List<String> inputBackendCrewNames() {
         try {
-            readCrewNameFromFile(BACKEND_SOURCE);
+            return readCrewNameFromFile(BACKEND_SOURCE);
         } catch (FileNotFoundException e) {
-            System.out.println();
+            throw new IllegalArgumentException();
         }
     }
 
-    public void inputFrontendCrewNames() {
+    public List<String> inputFrontendCrewNames() {
         try {
-            readCrewNameFromFile(FRONTEND_SOURCE);
+            return readCrewNameFromFile(FRONTEND_SOURCE);
         } catch (FileNotFoundException e) {
-            System.out.println();
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public int inputNumber() {
+        String input = Console.readLine();
+        return parseInt(input);
+    }
+
+    private int parseInt(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException();
         }
     }
 
