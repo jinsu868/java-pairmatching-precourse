@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import pairmatching.error.ErrorCode;
 
 public class InputView {
     private static final String BACKEND_SOURCE = "src/main/resources/backend-crew.md";
@@ -17,7 +18,7 @@ public class InputView {
         try {
             return readCrewNameFromFile(BACKEND_SOURCE);
         } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException();
+            throw ErrorCode.FILE_NOT_EXIST.getException();
         }
     }
 
@@ -25,7 +26,7 @@ public class InputView {
         try {
             return readCrewNameFromFile(FRONTEND_SOURCE);
         } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException();
+            throw ErrorCode.FILE_NOT_EXIST.getException();
         }
     }
 
@@ -38,7 +39,7 @@ public class InputView {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException();
+            throw ErrorCode.INVALID_SELECT_NUMBER.getException();
         }
     }
 
@@ -55,7 +56,7 @@ public class InputView {
             bufReader.close();
             return crewNames;
         } catch(IOException e) {
-            throw new IllegalArgumentException();
+            throw ErrorCode.IO_FAIL.getException();
         }
     }
 }
