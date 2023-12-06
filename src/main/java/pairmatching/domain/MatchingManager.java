@@ -18,12 +18,12 @@ public class MatchingManager {
     }
 
     public List<Pair> matchPair(Course course, Level level, String mission) {
-        List<MatchingResult> matchingResults = getMatchingResultsByLevel(level);
+        List<MatchingResult> matchingResultsByLevel = getMatchingResultsByLevel(level);
         Matching matching = new Matching(course, level, mission);
         boolean isMatch = true;
         for (int i = 0; i < 3; i++) {
             List<Pair> matchPairs = getMatchPairsByCourse(course, matching);
-            for (MatchingResult matchingResult : matchingResults) {
+            for (MatchingResult matchingResult : matchingResultsByLevel) {
                 List<Pair> pairs = matchingResult.getPairs();
                 for (Pair pair : pairs) {
                     if (isPairDuplicateInSameLevel(matchPairs, pair)) {
@@ -43,6 +43,20 @@ public class MatchingManager {
             throw new IllegalStateException();
         }
         return new ArrayList<>();
+    }
+
+    public List<Pair> retrieveMatchingResult(Course course, Level level, String mission) {
+        return matchingResults.stream()
+                .filter(result -> result.getCourse() == course
+                        && result.getLevel() == level
+                        && result.getMission().equals(mission))
+                .findAny()
+                .map(result -> result.getPairs())
+                .orElse(new ArrayList<>());
+    }
+
+    public void initMatching() {
+        matchingResults = new ArrayList<>();
     }
 
     private List<Pair> getMatchPairsByCourse(Course course, Matching matching) {

@@ -24,4 +24,12 @@ public class MatchingResult {
     public Level getLevel() {
         return level;
     }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public String getMission() {
+        return mission;
+    }
 }

@@ -12,6 +12,7 @@ import pairmatching.domain.MatchingManager;
 import pairmatching.domain.Pair;
 import pairmatching.dto.CrewCreateDto;
 import pairmatching.dto.PairRetrieveDto;
+import pairmatching.error.ErrorCode;
 import pairmatching.view.InputView;
 import pairmatching.view.OutputView;
 
@@ -31,24 +32,55 @@ public class MatchingController {
         while (true) {
             Choice choice = getChoice();
             if (choice.equals(Choice.MATCHING)) {
-                outputView.printPairRetrieveIntroMessage();
-                PairRetrieveDto pairRetrieveDto = inputView.inputRetrieveInfo();
-                Course course = Course.getCourse(pairRetrieveDto.getCourse());
-                Level level = Level.getLevel(pairRetrieveDto.getLevel());
-                String mission = pairRetrieveDto.getMission();
-                List<Pair> pairs = matchingManager.matchPair(course, level, mission);
-                outputView.printMatchingResult(pairs);
+                matchPairs(matchingManager);
             } else if (choice.equals(Choice.RETRIEVE)) {
-                System.out.println("retrieve");
+                retrievePairs(matchingManager);
             } else if (choice.equals(Choice.INIT)) {
-                System.out.println("init");
+                matchingManager.initMatching();
+                outputView.printInitMessage();
             } else if (choice.equals(Choice.QUIT)) {
-                System.out.println("exit");
                 break;
             }
         }
     }
 
+    private void retrievePairs(MatchingManager matchingManager) {
+        while (true) {
+            try {
+                outputView.printPairRetrieveIntroMessage();
+                PairRetrieveDto pairRetrieveDto = inputView.inputRetrieveInfo();
+                Course course = Course.getCourse(pairRetrieveDto.getCourse());
+                Level level = Level.getLevel(pairRetrieveDto.getLevel());
+                String mission = pairRetrieveDto.getMission();
+                if (!level.getMissions().contains(mission)) {
+                    throw ErrorCode.MISSION_LEVEL_NOT_MATCH.getException();
+                }
+                List<Pair> pairs = matchingManager.retrieveMatchingResult(course, level, mission);
+                outputView.printMatchingResult(pairs);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void matchPairs(MatchingManager matchingManager) {
+        while (true) {
+            try {
+                outputView.printPairRetrieveIntroMessage();
+                PairRetrieveDto pairRetrieveDto = inputView.inputRetrieveInfo();
+                Course course = Course.getCourse(pairRetrieveDto.getCourse());
+                Level level = Level.getLevel(pairRetrieveDto.getLevel());
+                String mission = pairRetrieveDto.getMission();
+                if (!level.getMissions().contains(mission)) {
+                    throw ErrorCode.MISSION_LEVEL_NOT_MATCH.getException();
+                }
+                List<Pair> pairs = matchingManager.matchPair(course, level, mission);
+                outputView.printMatchingResult(pairs);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
     private Crews setBackendCrews() {
         List<CrewCreateDto> backendCrewCreateDto = inputView.inputBackendCrewNames();
         List<Crew> crews = backendCrewCreateDto.stream()
