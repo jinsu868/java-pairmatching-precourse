@@ -8,11 +8,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import pairmatching.dto.PairRetrieveDto;
 import pairmatching.error.ErrorCode;
 
 public class InputView {
     private static final String BACKEND_SOURCE = "src/main/resources/backend-crew.md";
     private static final String FRONTEND_SOURCE = "src/main/resources/frontend-crew.md";
+    private static final int RETRIEVE_INFO_SIZE = 3;
+    private static final String DELIMITER = ", ";
 
     public List<String> inputBackendCrewNames() {
         try {
@@ -34,6 +37,20 @@ public class InputView {
         String input = Console.readLine();
         return parseInt(input);
     }
+
+    public PairRetrieveDto inputRetrieveInfo() {
+        String input = Console.readLine();
+        return parseRetrieveInfo(input);
+    }
+
+    private PairRetrieveDto parseRetrieveInfo(String input) {
+        String[] data = input.split(DELIMITER);
+        if (data.length != RETRIEVE_INFO_SIZE) {
+            throw ErrorCode.INVALID_RETRIEVE_INFO.getException();
+        }
+        return new PairRetrieveDto(data[0], data[1], data[2]);
+    }
+
 
     private int parseInt(String input) {
         try {
