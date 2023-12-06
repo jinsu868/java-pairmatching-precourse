@@ -20,13 +20,14 @@ public class MatchingController {
     }
 
     public void run() {
-        Crews crews = setCrews();
-        crews.test();
-
+        Crews backendCrews = setBackendCrews();
+        Crews frontendCrews = setFrontendCrews();
+        
         while (true) {
             Choice choice = getChoice();
             if (choice.equals(Choice.MATCHING)) {
                 System.out.println("matching");
+
             } else if (choice.equals(Choice.RETRIEVE)) {
                 System.out.println("retrieve");
             } else if (choice.equals(Choice.INIT)) {
@@ -38,11 +39,17 @@ public class MatchingController {
         }
     }
 
-    private Crews setCrews() {
+    private Crews setBackendCrews() {
         List<CrewCreateDto> backendCrewCreateDto = inputView.inputBackendCrewNames();
+        List<Crew> crews = backendCrewCreateDto.stream()
+                .map(dto -> new Crew(dto.getCourse(), dto.getName()))
+                .collect(Collectors.toList());
+        return new Crews(crews);
+    }
+
+    private Crews setFrontendCrews() {
         List<CrewCreateDto> frontendCrewCreateDto = inputView.inputFrontendCrewNames();
-        List<Crew> crews = Stream.of(backendCrewCreateDto, frontendCrewCreateDto)
-                .flatMap(dto -> dto.stream())
+        List<Crew> crews = frontendCrewCreateDto.stream()
                 .map(dto -> new Crew(dto.getCourse(), dto.getName()))
                 .collect(Collectors.toList());
         return new Crews(crews);
